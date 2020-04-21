@@ -1,51 +1,22 @@
-import csv 
-import requests 
-import xml.etree.ElementTree as ET 
+import csv
+import xml.etree.ElementTree as ET
   
-def loadRSS(): 
-  
-    # url of rss feed 
-    url = 'http://www.hindustantimes.com/rss/topnews/rssfeed.xml'
-  
-    # creating HTTP response object from given url 
-    resp = requests.get(url) 
-  
-    # saving the xml file 
-    with open('topnewsfeed.xml', 'wb') as f: 
-        f.write(resp.content) 
+def getConfig(configFile):
+    f = open("config.txt", "r")
+    configArray = []
+    for line in f:
+        if line[0] != '#' and line != '\n':
+            configArray.append(line[0].strip())
+    return configArray
+
+
           
   
-def parseXML(xmlfile): 
-  
-    # create element tree object 
-    tree = ET.parse(xmlfile) 
-  
-    # get root element 
-    root = tree.getroot() 
-  
-    # create empty list for news items 
-    newsitems = [] 
-  
-    # iterate news items 
-    for item in root.findall('./channel/item'): 
-  
-        # empty news dictionary 
-        news = {} 
-  
-        # iterate child elements of item 
-        for child in item: 
-  
-            # special checking for namespace object content:media 
-            if child.tag == '{http://search.yahoo.com/mrss/}content': 
-                news['media'] = child.attrib['url'] 
-            else: 
-                news[child.tag] = child.text.encode('utf8') 
-  
-        # append news dictionary to news items list 
-        newsitems.append(news) 
-      
-    # return news items list 
-    return newsitems 
+def parseXML(thingToParse):
+    if thingToParse == 1:
+        print "Get DAs defined in VSEconfig"
+
+
   
   
 def savetoCSV(newsitems, filename): 
@@ -66,15 +37,44 @@ def savetoCSV(newsitems, filename):
         writer.writerows(newsitems) 
   
       
-def main(): 
-    # load rss from web to update existing xml file 
-    loadRSS() 
-  
-    # parse xml file 
-    newsitems = parseXML('topnewsfeed.xml') 
-  
-    # store news items in a csv file 
-    savetoCSV(newsitems, 'topnews.csv') 
+def main():
+    # Parse the file
+    tree = ET.parse('VSEconfig.xml')
+
+    # Get the file root
+    root = tree.getroot()
+
+    testFile = open("test.csv", "a")
+    test = {}
+    for neighbors in root.iter('GenericBattleManager'):
+            BM = neighbors.get('name')
+            testFile.write(BM)
+
+            for neighbor in neighbors.iter('Asset'):
+                asset =  neighbor.attrib.get('name')
+                testFile.write(",")
+                testFile.write(asset)
+            testFile.write("\n")
+    testFile.close();
+
+
+
+    #print dicti
+
+   #33 print "3333"
+    #for asset in root.iter('GenericBattleManager'):
+    #    assetName = asset.find('Asset')
+    #    BM = asset.get('name')
+    #    print(BM, assetName)
+
+    # get config prompts
+    #actionsToDo = getConfig('config.txt')
+    #print actionsToDo
+
+    # parse xml file and save to csv
+    #for action in actionsToDo:
+     #   newsitems = parseXML(action)
+    #    savetoCSV(newsitems, action)
       
       
 if __name__ == "__main__": 
