@@ -1,0 +1,19 @@
+#Uncomment the line(s) you want run. You can run multiple functions, and will be returned multiple CSV files
+# ------- iSim -------
+Get DAs defined in VSEconfig
+# Get BMOAS defined in VSEconfig
+# GUID – Do we need this function?
+# Battle manager assets
+
+# ------- EADSIM -------
+#get all enumerations
+#get air enumerations
+#get system enumerations
+#get threat enumerations 
+
+# ------- OSM -------
+#get all enumerations
+#get active filters (from MSG)
+
+# ------- JSPA -------
+#getEnums # gets enums and outputs to csv file for simple reading
